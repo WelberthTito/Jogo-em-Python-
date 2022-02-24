@@ -1,3 +1,4 @@
+from turtle import position
 import pygame
 from sys import exit
 
@@ -11,6 +12,7 @@ tela = pygame.display.set_mode((x_tam, y_tam), 0)
 
 #carregamento das imagens:
 image_sshet_fundo = pygame.image.load("./assets/blocos.jpg").convert_alpha()
+image_sshet_blocks = pygame.image.load("./assets/blocks.png").convert_alpha()
 image_sshet_carac = pygame.image.load("./assets/manblack (1).png").convert_alpha()
 
 imagem_fundo = pygame.image.load("./assets/city.gif").convert_alpha()
@@ -33,7 +35,7 @@ matriz = [
     "..................................................................p",
     "..................................................................p",
     "..................................................................p",
-    "ppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp",
+    "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu",
 ]
 
 # Função criada para carregar as imagens nos sprites e na matriz
@@ -46,6 +48,7 @@ def get_img_by_gid(spritesheet, gid, columns=10, w=43, h=45, sh=3, sv=0, magenl=
 
 
 img_plataforma = get_img_by_gid(image_sshet_fundo, 42)
+img_grass = get_img_by_gid(image_sshet_blocks,5)
 
 #função para transpor a matriz criada, na tela.
 
@@ -58,6 +61,9 @@ def pintar_linha(linha, conteudo):
         elif caracter == '.': # se o carcter for ".' , nada acontece por enquanto
             pass
 
+        if caracter == "u":
+            tela.blit(img_grass,(x,y))
+
 
 def pintar_cenario():
     for linha, conteudo_linha in enumerate(matriz):
@@ -69,7 +75,7 @@ class player(pygame.sprite.Sprite):
         x_pos = 100
         y_pos = 515
         pygame.sprite.Sprite.__init__(self)
-        self.ciclo_p = 30
+        self.ciclo_p = 50
         self.ciclo_c= 0
         self.indice = 0
         self.and_direita=[1,2,3]
@@ -92,10 +98,10 @@ class player(pygame.sprite.Sprite):
         if self.pulo == True:
          if self.rect.y < 350:
             self.pulo = False
-         self.rect.y -= 3
+         self.rect.y -= 2
         else:
             if self.rect.y < self.pos_y_ini:
-                self.rect.y += 3
+                self.rect.y += 2
             else:
              self.rect.y = self.pos_y_ini
 
@@ -112,11 +118,11 @@ class player(pygame.sprite.Sprite):
         #movimento
         key = pygame.key.get_pressed()
         if key[pygame.K_LEFT]:
-            self.rect.x -= 2
+            self.rect.x -= 1
             self.frames = self.and_equerda = [4,5,6]
         if key[pygame.K_RIGHT]:
-            self.rect.x += 2
-            self.frames= self.and_direita = [1, 2, 3]
+            self.rect.x += 1
+            self.frames = self.and_direita = [1, 2, 3]
         if key[pygame.K_SPACE]:
             if player1.rect.y != player1.pos_y_ini:
                 pass
@@ -124,8 +130,7 @@ class player(pygame.sprite.Sprite):
                 self.pular()
 
 
-
-
+           
 
 player1 = player()
 players = pygame.sprite.Group(player1)
